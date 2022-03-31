@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     } else if (connectionResult == ConnectivityResult.wifi) {
       MyDialogs.success("Wifi Network", "", seconds: 2);
     } else {
-      MyDialogs.error("No Internet", "", seconds: 2);
+      MyDialogs.error("No Internet", "Check Your Connectivity", seconds: 2);
     }
   }
 
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   void connectTcpServer(String ip, int port) async {
     try {
       Socket socket = await Socket.connect(ip, port);
-      MyDialogs.success('Connected to TCP Server', "${ip}:${port}");
+      MyDialogs.success('Connected to the TCP Server', "${ip}:${port}");
     } catch (e) {
       MyDialogs.error("Failed To Connect", "${ip}:${port}");
     }
@@ -93,10 +93,8 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       image: active
                           ? DecorationImage(
-                              // image: NetworkImage("https://asselum.com/wp-content/uploads/The-Blue-Light-Hazard-according-to-the-CIE-1080x675.jpg"),
                               image: NetworkImage(
                                   "https://thumbs.dreamstime.com/b/abstract-blue-light-grid-technology-background-illu-illustration-design-65069866.jpg"),
-                              // image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO7_4kPJ2P5InQyNjoL5gqowreZubuaczbkQ&usqp=CAU"),
                               fit: BoxFit.cover)
                           : null),
                   child: Column(
@@ -133,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                           icon: Icon(Icons.network_check),
                           label: Text("Check connection"),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.pink
+                            primary: Colors.deepPurple
                         ),
                       ),
                     ),
@@ -146,7 +144,11 @@ class _HomePageState extends State<HomePage> {
                             _vibrate();
                           },
                           icon: Icon(Icons.vibration),
-                          label: Text("Brrrr, It's freezing!")),
+                          label: Text("Brrrr, It's freezing!"),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.deepPurple
+                          ),
+                      ),
                     ),
                   ],
                 ),
@@ -165,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       child: Text(
                         'What is my IP address?',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.amber),
                       )),
                 ),
 
@@ -216,13 +218,12 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 10),
                       ElevatedButton(
                           onPressed: () {
-                            if (_ipController.text.isEmpty ||
-                                _portController.text.isEmpty) {
-                              MyDialogs.error(
-                                  "Field is empty", "Please fill both fields");
+                            if (_ipController.text.isEmpty || _portController.text.isEmpty) {
+                              MyDialogs.error("IP and Port are required!", "Please fill both fields");
                             } else {
-                              connectTcpServer(_ipController.text,
-                                  int.parse(_portController.text));
+                              connectTcpServer(_ipController.text, int.parse(_portController.text));
+                              // _ipController.clear();
+                              // _portController.clear();
                             }
                           },
                           child: Text('Connect'),
@@ -238,8 +239,6 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 50,
                 ),
-
-                // Center(child: Text("Result: ${qrCode}")),
 
                 Center(
                   child: Column(
